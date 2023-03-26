@@ -8,6 +8,7 @@ dependency = "*"
 gunicorn = "*"
 django = "*"
 django-heroku = "*"
+libraryname = "*"
 
 [dev-packages]
 
