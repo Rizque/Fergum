@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pw!jzsn++6vq__-!h9izg6&k!tc@hwzv%1^ke4w^f__@&cb_rb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['https://fergum.herokuapp.com/']
 
