@@ -1,0 +1,1 @@
+web: gunicorn fergum.wsgi:application --log-file -
