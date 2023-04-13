@@ -1,4 +1,7 @@
 {% extends 'main.html' %} {% block content %}
-<p>hello</p>
 <h1>{{profile.username}}</h1>
+<button type="button">
+  <a href="{% url 'add-property' %}">Add property</a>
+</button>
+
 {% endblock %}
