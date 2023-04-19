@@ -90,3 +90,7 @@ def profile(request):
     profile = request.user.profile
     context = {'profile': profile, }
     return render(request, 'users/profile.html', context)
+
+
+def adress(request):
+    return render(request, 'users/adress_locator.html')
