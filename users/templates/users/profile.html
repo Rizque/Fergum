@@ -1,7 +1,13 @@
 {% extends 'main.html' %} {% block content %}
 <h1>{{profile.username}}</h1>
-<button type="button">
-  <a href="{% url 'add-property' %}">Add property</a>
-</button>
 
-{% endblock %}
+<a href="{% url 'edit-profile' %}">Edit Profile</a>
+<a href="{% url 'add-property' %}">Add Property</a>
+
+{% for property in profile.property_set.all %}
+<p>
+  {{ property.name }}
+  <a href="{% url 'update-property' property.id %}">Update</a>
+  <a href="{% url 'delete-property' property.id %}">Delete</a>
+</p>
+{% endfor %} {% endblock %}

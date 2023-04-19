@@ -7,6 +7,7 @@ class PropertyForm(ModelForm):
     class Meta:
         model = Property
         fields = '__all__'
+        exclude = ['owner']
 
     def __init__(self, *args, **kwargs):
         super(PropertyForm, self).__init__(*args, **kwargs)

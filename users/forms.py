@@ -13,28 +13,18 @@ class UserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
 
-
-
         # for name, field in self.fields.items():
         #     field.widget.attrs.update({'class': 'input'})
 
 
-# class ProfileForm(ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = '__all__'
-#         exclude = ['user', 'username', 's_datums']
-#         labels = {
-#             's_nosaukums': 'Saimniecības nosaukums:',
-#             's_apraksts': 'Apraksts:',
-#             's_foto': 'Fotogrāfija:',
-#             'email': 'E-pasts:',
-#             'talrunis': 'Tālrunis:',
-#             'lokacija': 'Lokācija:',
-#         }
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        exclude = ['user']
 
-#     def __init__(self, *args, **kwargs):
-#         super(ProfileForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
 
-#         for name, field in self.fields.items():
-#             field.widget.attrs.update({'class': 'input'})
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'input'})
