@@ -61,7 +61,7 @@ def registerUser(request):
             messages.success(request, 'User account was created!')
 
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('profile')
+            return redirect('add-property')
         else:
             messages.success(
                 request, 'An error has occurred during registration')
