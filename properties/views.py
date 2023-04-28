@@ -2,9 +2,19 @@ from django.shortcuts import render, redirect
 from .models import Property
 from django.contrib.auth.decorators import login_required
 from .forms import PropertyForm
+# from django.shortcuts import get_object_or_404
 
 
-# Create your views here.
+# def main_page(request, pk):
+#     if 'chosen_property' in request.session:
+#         property_name = request.session['chosen_property']
+#         property = get_object_or_404(Property, id=pk)
+#     else:
+#         property = Property.objects.first()
+
+#     return render(request, 'main_page.html', {'property': property})
+
+
 @login_required(login_url='login')
 def addProperty(request):
     profile = request.user.profile

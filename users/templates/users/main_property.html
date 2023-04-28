@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content %}
+  <h1>{{ chosen_property.name }}</h1>
+
+  <p>City: {{ chosen_property.city }}</p>
+  <p>Country: {{ chosen_property.country }}</p>
+  <p>Address: {{ chosen_property.address }}</p>
+  <p>Latitude: {{ chosen_property.latitude }}</p>
+  <p>Longitude: {{ chosen_property.longitude }}</p>
+
+  <hr>
+
+  <h2>My Properties</h2>
+  <ul>
+    {% for property in properties %}
+      <li{% if property.id == chosen_property.id %} class="active"{% endif %}>
+        <a href="{% url 'main-property' property.id %}" onclick="updateUrl('{{ property.id }}');">
+          {{ property.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <script>
+    function updateUrl(propertyId) {
+      var url = new URL(window.location.href);
+      url.searchParams.set('property_id', propertyId);
+      history.replaceState(null, '', url);
+    }
+    </script>
+{% endblock %}

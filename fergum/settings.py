@@ -134,8 +134,9 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = '/'
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
