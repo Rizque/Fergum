@@ -1,32 +1,48 @@
-{% extends 'main.html' %}
+{% extends 'main.html' %} {% block content %}
+<h1>{{ chosen_property.name }}</h1>
 
-{% block content %}
-  <h1>{{ chosen_property.name }}</h1>
+<p>City: {{ chosen_property.city }}</p>
+<p>Country: {{ chosen_property.country }}</p>
+<p>Address: {{ chosen_property.address }}</p>
+<p>Latitude: {{ chosen_property.latitude }}</p>
+<p>Longitude: {{ chosen_property.longitude }}</p>
 
-  <p>City: {{ chosen_property.city }}</p>
-  <p>Country: {{ chosen_property.country }}</p>
-  <p>Address: {{ chosen_property.address }}</p>
-  <p>Latitude: {{ chosen_property.latitude }}</p>
-  <p>Longitude: {{ chosen_property.longitude }}</p>
+<hr />
 
-  <hr>
-
-  <h2>My Properties</h2>
-  <ul>
-    {% for property in properties %}
-      <li{% if property.id == chosen_property.id %} class="active"{% endif %}>
-        <a href="{% url 'main-property' property.id %}" onclick="updateUrl('{{ property.id }}');">
-          {{ property.name }}
-        </a>
-      </li>
-    {% endfor %}
+<div class="dropdown">
+  <button
+    class="btn btn-secondary dropdown-toggle"
+    type="button"
+    id="dropdownMenuButton"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    {{ chosen_property.name }}
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for property in properties %} {% if property.id != chosen_property.id %}
+    <li>
+      <a
+        class="dropdown-item"
+        href="{% url 'main-property' property.id %}"
+        onclick="updateUrl('{{ property.id }}');"
+      >
+        {{ property.name }}
+      </a>
+    </li>
+    {% endif %} {% endfor %} {% if not properties|length %}
+    <li>
+      <a class="dropdown-item disabled"> No other properties </a>
+    </li>
+    {% endif %}
   </ul>
+</div>
 
-  <script>
-    function updateUrl(propertyId) {
-      var url = new URL(window.location.href);
-      url.searchParams.set('property_id', propertyId);
-      history.replaceState(null, '', url);
-    }
-    </script>
+<script>
+  function updateUrl(propertyId) {
+    var url = new URL(window.location.href);
+    url.searchParams.set("property_id", propertyId);
+    history.replaceState(null, "", url);
+  }
+</script>
 {% endblock %}

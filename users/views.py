@@ -80,6 +80,7 @@ def editProfile(request):
 #     properties = user_profile.property_set.all()
 #     return render(request, 'users/property_list.html', {'properties': properties})
 
+
 @login_required
 def home(request):
     user_profile = request.user.profile
@@ -89,7 +90,14 @@ def home(request):
     if pk:
         chosen_property = get_object_or_404(
             Property, pk=pk, owner=user_profile)
+        # convert pk to string and store in session
+        request.session['chosen_property'] = str(pk)
         return redirect('main-property', pk=pk)
+    elif 'chosen_property' in request.session:
+        chosen_property_pk = request.session['chosen_property']
+        chosen_property = get_object_or_404(
+            Property, pk=chosen_property_pk, owner=user_profile)
+        return redirect('main-property', pk=chosen_property_pk)
     elif properties:
         return redirect('main-property', pk=properties[0].pk)
     else:
@@ -104,6 +112,12 @@ def mainProperty(request, pk=None):
     if pk:
         chosen_property = get_object_or_404(
             Property, pk=pk, owner=user_profile)
+        # convert pk to string and store in session
+        request.session['chosen_property'] = str(pk)
+    elif 'chosen_property' in request.session:
+        chosen_property_pk = request.session['chosen_property']
+        chosen_property = get_object_or_404(
+            Property, pk=chosen_property_pk, owner=user_profile)
     elif properties:
         chosen_property = properties[0]
     else:
@@ -113,6 +127,7 @@ def mainProperty(request, pk=None):
         'chosen_property': chosen_property,
         'properties': properties,
     })
+
 
 # @login_required(login_url='login')
 
