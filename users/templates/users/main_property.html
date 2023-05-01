@@ -9,6 +9,7 @@
 
 <hr />
 
+{% if properties|length > 1 %}
 <div class="dropdown">
   <button
     class="btn btn-secondary dropdown-toggle"
@@ -37,6 +38,7 @@
     {% endif %}
   </ul>
 </div>
+{% endif %}
 
 <script>
   function updateUrl(propertyId) {

@@ -101,7 +101,7 @@ def home(request):
     elif properties:
         return redirect('main-property', pk=properties[0].pk)
     else:
-        return render(request, 'no_properties.html')
+        return render(request, 'users/no_properties.html')
 
 
 @login_required
@@ -136,6 +136,12 @@ def profile(request):
     profile = request.user.profile
     context = {'profile': profile, }
     return render(request, 'users/profile.html', context)
+
+
+def history(request):
+    profile = request.user.profile
+    context = {'profile': profile, }
+    return render(request, 'users/history.html', context)
 
 
 def adress(request):
