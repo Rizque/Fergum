@@ -1,14 +1,38 @@
 {% extends 'main.html' %} {% block content %}
-<h1>{{profile.username}}</h1>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1>{{ profile.username }}</h1>
 
-<a href="{% url 'edit-profile' %}">Edit Profile</a>
-<a href="{% url 'add-property' %}">Add Property</a>
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'edit-profile' %}" class="btn btn-primary"
+          >Edit Profile</a
+        >
+        <a href="{% url 'add-property' %}" class="btn btn-primary"
+          >Add Property</a
+        >
+      </div>
 
-{% for property in profile.property_set.all %}
-<p>
-  {{ property.name }}
-  <a href="{% url 'update-property' property.id %}">Update</a>
-  <a href="{% url 'delete-property' property.id %}">Delete</a>
-</p>
-
-{% endfor %} {% endblock %}
+      {% for property in profile.property_set.all %}
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">{{ property.name }}</h5>
+          <div class="d-flex justify-content-end">
+            <a
+              href="{% url 'update-property' property.id %}"
+              class="btn btn-primary me-2"
+              >Update</a
+            >
+            <a
+              href="{% url 'delete-property' property.id %}"
+              class="btn btn-danger"
+              >Delete</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
