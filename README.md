@@ -1,3 +1,5 @@
+Mērķis - izveidot vietni, kurā lietotāji spēs pievienot savus nekustamos īpašumus un tos pārvaldīt/menedžēt.
+
 Fergum - vietne, kurā lietotājiem iespējams pievienot savus nekustamos īpašumus un tos menedžēt.
 
 No sākuma lietotājam ir iespēja gan iereģistrēties ievadot, username, email un password vai arī vienkārši pievienojoties caur google account.
