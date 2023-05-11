@@ -78,7 +78,9 @@
             <li>
               <a class="dropdown-item" href="{% url 'history' %}">History</a>
             </li>
+            {% if request.user.is_staff %}
             <li><a class="dropdown-item" href="#!">Settings</a></li>
+            {% endif %}
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>

@@ -3,16 +3,15 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserCreationForm, ProfileForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import Profile
 from properties.models import Property
+from .decorators import unauthenticated_user, allowed_users, worker_only
 
 
+@unauthenticated_user
 def loginUser(request):
     page = 'login'
-    if request.user.is_authenticated:
-        return redirect('home')
-
     if request.method == 'POST':
         username = request.POST['username'].lower()
         password = request.POST['password']
@@ -32,11 +31,7 @@ def loginUser(request):
     return render(request, 'users/login_register.html')
 
 
-def logoutUser(request):
-    logout(request)
-    return redirect('login')
-
-
+@unauthenticated_user
 def registerUser(request):
     page = 'register'
     form = UserCreationForm()
@@ -45,6 +40,9 @@ def registerUser(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            username = form.cleaned_data.get('username')
+            group = Group.objects.get(name='owner')
+            user.groups.add(group)
             user.username = user.username.lower()
             user.save()
 
@@ -58,6 +56,11 @@ def registerUser(request):
 
     context = {'page': page, 'form': form}
     return render(request, 'users/login_register.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 
 
 @login_required(login_url='login')
@@ -81,7 +84,8 @@ def editProfile(request):
 #     return render(request, 'users/property_list.html', {'properties': properties})
 
 
-@login_required
+@login_required(login_url='login')
+@worker_only
 def home(request):
     user_profile = request.user.profile
     properties = Property.objects.filter(owner=user_profile)
