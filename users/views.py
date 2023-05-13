@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -41,18 +42,13 @@ def registerUser(request):
         if form.is_valid():
             user = form.save(commit=False)
             username = form.cleaned_data.get('username')
-            group = Group.objects.get(name='owner')
-            user.groups.add(group)
+
+            # Save the user without committing to the database
             user.username = user.username.lower()
             user.save()
 
-            messages.success(request, 'User account was created!')
-
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('add-property')
-        else:
-            messages.success(
-                request, 'An error has occurred during registration')
+            # Render a form for the user to select their group
+            return render(request, 'users/select_group.html', {'user_id': user.id})
 
     context = {'page': page, 'form': form}
     return render(request, 'users/login_register.html', context)
@@ -61,6 +57,24 @@ def registerUser(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+
+def selectGroup(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group')
+        user_id = request.POST.get('user_id')
+
+        group = Group.objects.get(name=group_name)
+        user = User.objects.get(id=user_id)
+        user.groups.add(group)
+        user.save()
+
+        messages.success(request, 'Group has been set successfully!')
+
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('home')
+
+    return render(request, 'users/select_group.html')
 
 
 @login_required(login_url='login')
@@ -78,38 +92,49 @@ def editProfile(request):
     return render(request, 'users/profile_form.html', context)
 
 
-# def property_list(request):
-#     user_profile = request.user.profile
-#     properties = user_profile.property_set.all()
-#     return render(request, 'users/property_list.html', {'properties': properties})
+@login_required
+def mainService(request):
+    # Implement the logic for the mainService view
+    # This view will be executed for users with the 'worker' group
+    # Provide the necessary code to display the worker's main service page
+
+    return render(request, 'users/main_service.html')
 
 
 @login_required(login_url='login')
-@worker_only
 def home(request):
     user_profile = request.user.profile
-    properties = Property.objects.filter(owner=user_profile)
-    pk = request.GET.get('pk')
+    user_groups = request.user.groups.values_list('name', flat=True)
 
-    if pk:
-        chosen_property = get_object_or_404(
-            Property, pk=pk, owner=user_profile)
-        # convert pk to string and store in session
-        request.session['chosen_property'] = str(pk)
-        return redirect('main-property', pk=pk)
-    elif 'chosen_property' in request.session:
-        chosen_property_pk = request.session['chosen_property']
-        chosen_property = get_object_or_404(
-            Property, pk=chosen_property_pk, owner=user_profile)
-        return redirect('main-property', pk=chosen_property_pk)
-    elif properties:
-        return redirect('main-property', pk=properties[0].pk)
+    if 'worker' in user_groups:
+        return redirect('main-service')
+    elif 'owner' in user_groups:
+        properties = Property.objects.filter(owner=user_profile)
+        pk = request.GET.get('pk')
+
+        if pk:
+            chosen_property = get_object_or_404(
+                Property, pk=pk, owner=user_profile)
+            # convert pk to string and store in session
+            request.session['chosen_property'] = str(pk)
+            return redirect('main-property', pk=pk)
+        elif 'chosen_property' in request.session:
+            chosen_property_pk = request.session['chosen_property']
+            chosen_property = get_object_or_404(
+                Property, pk=chosen_property_pk, owner=user_profile)
+            return redirect('main-property', pk=chosen_property_pk)
+        elif properties:
+            return redirect('main-property', pk=properties[0].pk)
+        else:
+            return render(request, 'users/no_properties.html')
     else:
-        return render(request, 'users/no_properties.html')
+        user = request.user
+        return render(request, 'users/select_group.html', {'user_id': user.id})
 
 
 @login_required
 def mainProperty(request, pk=None):
+
     user_profile = request.user.profile
     properties = Property.objects.filter(owner=user_profile)
 
