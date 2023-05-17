@@ -1,36 +1,5 @@
 {% extends 'main.html' %} {% block content %}
 <h1>Service</h1>
-<!-- Assuming you have a form wrapping the button -->
-<form id="switch-group-form" method="post">
-  {% csrf_token %}
-  <button type="submit" id="switch-group-btn">Switch Group</button>
-</form>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const switchGroupForm = document.getElementById("switch-group-form");
-    const switchGroupBtn = document.getElementById("switch-group-btn");
-
-    switchGroupForm.addEventListener("submit", function (e) {
-      e.preventDefault(); // Prevent form submission
-
-      // Update chosen_group value
-      const currentGroup = "{{ chosen_group }}";
-      const updatedGroup = currentGroup === "worker" ? "owner" : "worker";
-
-      // Create a hidden input field to store the updated value
-      const updatedGroupInput = document.createElement("input");
-      updatedGroupInput.setAttribute("type", "hidden");
-      updatedGroupInput.setAttribute("name", "chosen_group");
-      updatedGroupInput.setAttribute("value", updatedGroup);
-
-      // Append the hidden input field to the form
-      switchGroupForm.appendChild(updatedGroupInput);
-
-      // Submit the form to execute the 'home' view
-      switchGroupForm.submit();
-    });
-  });
-</script>
+<!-- Import jQuery library (if not already imported) -->
 
 {% endblock %}

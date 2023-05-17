@@ -226,6 +226,38 @@
               </a>
             </div>
           </div>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+          <!-- Add the button and define a JavaScript function -->
+
+          <!-- Check if the user has exactly 2 assigned groups with names 'worker' and 'owner' -->
+          {% if user.groups.count == 2 %}
+          <!-- Display the user's assigned groups -->
+
+          <button id="switch-group-btn">Switch Role</button>
+
+          {% endif %}
+
+          <script>
+            // JavaScript function to handle button click
+            $(document).ready(function () {
+              $("#switch-group-btn").click(function () {
+                // Make an AJAX request to update the chosen_group value
+                $.ajax({
+                  type: "POST",
+                  url: "{% url 'switch_group' %}",
+                  data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                  },
+                  success: function (response) {
+                    // Reload the page to reflect the updated value
+                    window.location.href = "{% url 'home' %}";
+                  },
+                });
+              });
+            });
+          </script>
+
           <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
             Start Bootstrap

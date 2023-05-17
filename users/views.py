@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
@@ -117,6 +118,7 @@ def home(request):
     if 'worker' in user_groups and 'owner' in user_groups:
         # Check if the chosen group is already stored in the session
         chosen_group = user_profile.chosen_group
+        print(chosen_group)
         if chosen_group == 'worker' and 'worker' in user_groups:
             return redirect('main-service')
         elif chosen_group == 'owner' and 'owner' in user_groups:
@@ -204,6 +206,19 @@ def mainProperty(request, pk=None):
         'properties': properties,
 
     })
+
+
+def switch_group(request):
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        if profile.chosen_group == 'worker':
+            profile.chosen_group = 'owner'
+        else:
+            profile.chosen_group = 'worker'
+        profile.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
 
 
 # @login_required(login_url='login')
