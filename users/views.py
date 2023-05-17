@@ -68,6 +68,9 @@ def selectGroup(request):
         user = User.objects.get(id=user_id)
         user.groups.add(group)
         user.save()
+        profile = Profile.objects.get(user=user)
+        profile.chosen_group = group_name
+        profile.save()
 
         messages.success(request, 'Group has been set successfully!')
 
@@ -93,11 +96,17 @@ def editProfile(request):
 
 
 @login_required
-def mainService(request):
-    # Implement the logic for the mainService view
-    # This view will be executed for users with the 'worker' group
-    # Provide the necessary code to display the worker's main service page
+def add_group(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        group = Group.objects.get(name=group_name)
+        request.user.groups.add(group)
+        # Redirect the user to a desired page after adding the group
+        return redirect('home')
 
+
+@login_required
+def mainService(request):
     return render(request, 'users/main_service.html')
 
 
@@ -105,8 +114,46 @@ def mainService(request):
 def home(request):
     user_profile = request.user.profile
     user_groups = request.user.groups.values_list('name', flat=True)
+    if 'worker' in user_groups and 'owner' in user_groups:
+        # Check if the chosen group is already stored in the session
+        chosen_group = user_profile.chosen_group
+        if chosen_group == 'worker' and 'worker' in user_groups:
+            return redirect('main-service')
+        elif chosen_group == 'owner' and 'owner' in user_groups:
+            properties = Property.objects.filter(owner=user_profile)
+            pk = request.GET.get('pk')
 
-    if 'worker' in user_groups:
+            if pk:
+                chosen_property = get_object_or_404(
+                    Property, pk=pk, owner=user_profile)
+                # convert pk to string and store in session
+                request.session['chosen_property'] = str(pk)
+                return redirect('main-property', pk=pk)
+            elif 'chosen_property' in request.session:
+                chosen_property_pk = request.session['chosen_property']
+                chosen_property = get_object_or_404(
+                    Property, pk=chosen_property_pk, owner=user_profile)
+                return redirect('main-property', pk=chosen_property_pk)
+            elif properties:
+                return redirect('main-property', pk=properties[0].pk)
+            else:
+                return render(request, 'users/no_properties.html')
+        #         properties = Property.objects.filter(owner=user_profile)
+        #         pk = request.session.get('chosen_property', None)
+        #         if pk:
+        #             chosen_property = get_object_or_404(
+        #                 Property, pk=pk, owner=user_profile)
+        #             return redirect('main-property', pk=pk)
+        #         elif properties:
+        #             return redirect('main-property', pk=properties[0].pk)
+        #         else:
+        #             return render(request, 'users/no_properties.html')
+        # else:
+        #     # If no group is chosen, set the default group to "worker"
+        #     if 'worker' in user_groups:
+        #         request.session['chosen_group'] = 'worker'
+        #         return redirect('main-service')
+    elif 'worker' in user_groups:
         return redirect('main-service')
     elif 'owner' in user_groups:
         properties = Property.objects.filter(owner=user_profile)
@@ -155,6 +202,7 @@ def mainProperty(request, pk=None):
     return render(request, 'users/main_property.html', {
         'chosen_property': chosen_property,
         'properties': properties,
+
     })
 
 
@@ -163,7 +211,9 @@ def mainProperty(request, pk=None):
 
 def profile(request):
     profile = request.user.profile
-    context = {'profile': profile, }
+    all_groups = Group.objects.all()
+
+    context = {'profile': profile, 'all_groups': all_groups}
     return render(request, 'users/profile.html', context)
 
 

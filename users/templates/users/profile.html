@@ -11,6 +11,16 @@
         <a href="{% url 'add-property' %}" class="btn btn-primary"
           >Add Property</a
         >
+        {% for group in all_groups %} {% if not group in user.groups.all %}
+        <form method="post" action="{% url 'add_group' %}">
+          {% csrf_token %}
+          <input type="hidden" name="group_name" value="{{ group.name }}" />
+
+          <button class="btn btn-primary" type="submit">
+            Add {{ group.name }} role
+          </button>
+        </form>
+        {% endif %} {% endfor %}
       </div>
 
       {% for property in profile.property_set.all %}
