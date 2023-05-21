@@ -31,3 +31,6 @@ class Service(models.Model):
 class WorkerService(models.Model):
     worker = models.ForeignKey(Profile, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.worker.username

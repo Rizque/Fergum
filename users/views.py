@@ -8,6 +8,7 @@ from .forms import UserCreationForm, ProfileForm
 from django.contrib.auth.models import User, Group
 from .models import Profile
 from properties.models import Property
+from services.models import WorkerService
 from .decorators import unauthenticated_user, allowed_users, worker_only
 
 
@@ -118,7 +119,6 @@ def home(request):
     if 'worker' in user_groups and 'owner' in user_groups:
         # Check if the chosen group is already stored in the session
         chosen_group = user_profile.chosen_group
-        print(chosen_group)
         if chosen_group == 'worker' and 'worker' in user_groups:
             return redirect('main-service')
         elif chosen_group == 'owner' and 'owner' in user_groups:
@@ -225,8 +225,14 @@ def switch_group(request):
 def profile(request):
     profile = request.user.profile
     all_groups = Group.objects.all()
+    chosen_group = profile.chosen_group
+    page = None
+    if chosen_group == 'worker':
+        page = 'worker_profile'
+    elif chosen_group == 'owner':
+        page = 'owner_profile'
 
-    context = {'profile': profile, 'all_groups': all_groups}
+    context = {'profile': profile, 'all_groups': all_groups, 'page': page}
     return render(request, 'users/profile.html', context)
 
 
