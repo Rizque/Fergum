@@ -4,7 +4,7 @@ import uuid
 
 
 class Property(models.Model):
-    id = models.UUIDField(
+    property_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(
         Profile, null=True, blank=True, on_delete=models.CASCADE)

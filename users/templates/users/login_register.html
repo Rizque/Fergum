@@ -25,9 +25,9 @@
             {% endfor %}
 
             <button type="submit" class="btn btn-primary btn-block">
-              Register
+              Sign Up
             </button>
-            <a href="{% provider_login_url 'google' %}">Login With Google</a>
+            <a href="{% provider_login_url 'google' %}">Sign Up With Google</a>
           </form>
         </div>
         <div class="card-footer text-center"></div>
@@ -61,7 +61,7 @@
             placeholder="••••••••"
           />
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">Sign In</button>
 
         {% comment %}
         <a href="{% provider_login_url 'facebook' method='js_sdk' %}"
@@ -69,7 +69,7 @@
         >
         {% endcomment %}
         <a href="{% provider_login_url 'google' %}?next=/home/"
-          >Login With Google</a
+          >Sign In With Google</a
         >
       </form>
     </div>

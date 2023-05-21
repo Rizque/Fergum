@@ -25,6 +25,8 @@ urlpatterns = [
     path('', views.frontpage, name='frontpage'),
     path('', include('users.urls')),
     path('', include('properties.urls')),
+    path('', include('services.urls')),
+
 
     path('accounts/', include('allauth.urls')),
 ]

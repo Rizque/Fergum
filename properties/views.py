@@ -33,7 +33,7 @@ def addProperty(request):
 @login_required(login_url='login')
 def updateProperty(request, pk):
     profile = request.user.profile
-    property = profile.property_set.get(id=pk)
+    property = profile.property_set.get(property_id=pk)
     form = PropertyForm(instance=property)
     if request.method == 'POST':
         form = PropertyForm(request.POST, request.FILES, instance=property)
@@ -48,6 +48,6 @@ def updateProperty(request, pk):
 @login_required(login_url='login')
 def deletePropertry(request, pk):
     profile = request.user.profile
-    product = profile.property_set.get(id=pk)
+    product = profile.property_set.get(property_id=pk)
     product.delete()
     return redirect('profile')

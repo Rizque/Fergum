@@ -26,12 +26,12 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {% for property in properties %}
           <!--  -->
-          {% if property.id != chosen_property.id %}
+          {% if property.property_id != chosen_property.property_id %}
           <li>
             <a
               class="dropdown-item"
-              href="{% url 'main-property' property.id %}"
-              onclick="updateUrl('{{ property.id }}');"
+              href="{% url 'main-property' property.property_id %}"
+              onclick="updateUrl('{{ property.property_id }}');"
             >
               {{ property.name }}
             </a>

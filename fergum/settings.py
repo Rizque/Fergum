@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'properties.apps.PropertiesConfig',
+    'services.apps.ServicesConfig',
 
     'allauth',
     'allauth.account',

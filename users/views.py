@@ -221,9 +221,7 @@ def switch_group(request):
         return JsonResponse({'success': False})
 
 
-# @login_required(login_url='login')
-
-
+@login_required(login_url='login')
 def profile(request):
     profile = request.user.profile
     all_groups = Group.objects.all()
