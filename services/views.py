@@ -1,12 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import WorkerServiceForm
-
+from .models import ServiceCategory, ServiceSubCategory, Service
 # Create your views here.
 
 
-def services(request):
-    return render(request, 'services/services.html')
+def categories(request):
+    categories = ServiceCategory.objects.all()
+    return render(request, 'services/categories.html', {'categories': categories})
+
+
+def subcategories(request, category_id):
+    category = get_object_or_404(ServiceCategory, category_id=category_id)
+    subcategories = ServiceSubCategory.objects.filter(category=category)
+    return render(request, 'services/subcategories.html', {'subcategories': subcategories})
+
+
+def service(request, service_id):
+    service = get_object_or_404(Service, service_id=service_id)
+    return render(request, 'services/service.html', {'service': service})
+
+
+def category_services(request, category_id):
+    category = ServiceCategory.objects.get(category_id=category_id)
+    services = Service.objects.filter(category=category)
+    return render(request, 'services/category_services.html', {'category': category, 'services': services})
 
 
 @login_required(login_url='login')

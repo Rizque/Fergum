@@ -46,6 +46,8 @@
   </div>
 </div>
 {% else %}
+<h1>{{ profile.username }}</h1>
+<a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
 <a href="{% url 'add-workerservice' %}" class="btn btn-primary"
   >Add Worker Service</a
 >
