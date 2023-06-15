@@ -2,7 +2,7 @@
 <h1>All Subcategories</h1>
 {% for subcategory in subcategories %}
 <a
-  href="{% url 'service_detail' service_id=subcategory.service_id %}"
+  href="{% url 'services' subcategory_id=subcategory.subcategory_id %}"
   class="btn btn-primary"
   >{{ subcategory.name }}</a
 >

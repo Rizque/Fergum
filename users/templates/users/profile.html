@@ -48,6 +48,16 @@
 {% else %}
 <h1>{{ profile.username }}</h1>
 <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+{% for group in all_groups %} {% if not group in user.groups.all %}
+<form method="post" action="{% url 'add_group' %}">
+  {% csrf_token %}
+  <input type="hidden" name="group_name" value="{{ group.name }}" />
+
+  <button class="btn btn-primary" type="submit">
+    Add {{ group.name }} role
+  </button>
+</form>
+{% endif %} {% endfor %}
 <a href="{% url 'add-workerservice' %}" class="btn btn-primary"
   >Add Worker Service</a
 >

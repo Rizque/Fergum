@@ -73,9 +73,6 @@ def selectGroup(request):
         profile = Profile.objects.get(user=user)
         profile.chosen_group = group_name
         profile.save()
-
-        messages.success(request, 'Group has been set successfully!')
-
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('home')
 

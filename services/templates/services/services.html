@@ -1,0 +1,13 @@
+{% extends 'main.html' %} {% block content %}
+<h1>Services</h1>
+<ul>
+  {% for service in services %}
+  <a href="{% url 'service' service_id=service.service_id %}">
+    <li>{{ service.name }}</li></a
+  >
+
+  {% empty %}
+  <li>No services found in this subcategory.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
